@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ThemeMode } from '@/lib/constants';
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<ThemeMode>('system');
+  const [theme, setThemeState] = useState<ThemeMode>('light');
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
 
   const applyTheme = useCallback((mode: ThemeMode) => {
@@ -29,7 +29,7 @@ export function useTheme() {
 
   useEffect(() => {
     const saved = localStorage.getItem('wedding-theme') as ThemeMode | null;
-    const initial = saved || 'system';
+    const initial = saved || 'light';
     setThemeState(initial);
     applyTheme(initial);
 

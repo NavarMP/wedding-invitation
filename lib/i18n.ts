@@ -40,7 +40,7 @@ export interface Translations {
   dateTime: string;
   saveTheDate: string;
   weddingOf: string;
-  nikahCeremony: string;
+  weddingCeremony: string;
 }
 
 const en: Translations = {
@@ -83,7 +83,7 @@ const en: Translations = {
   dateTime: 'Sunday · 24 May 2026 · 11 AM',
   saveTheDate: 'Save the Date',
   weddingOf: 'The Wedding of',
-  nikahCeremony: 'Nikah Ceremony',
+  weddingCeremony: 'Wedding Ceremony',
 };
 
 const ar: Translations = {
@@ -126,7 +126,7 @@ const ar: Translations = {
   dateTime: 'الأحد · 24 مايو 2026 · 11 صباحًا',
   saveTheDate: 'احفظ التاريخ',
   weddingOf: 'حفل زفاف',
-  nikahCeremony: 'حفل النكاح',
+  weddingCeremony: 'حفل زفاف',
 };
 
 const ml: Translations = {
@@ -169,7 +169,7 @@ const ml: Translations = {
   dateTime: 'ഞായർ · 2026 മെയ് 24 · രാവിലെ 11',
   saveTheDate: 'തീയതി സൂക്ഷിക്കുക',
   weddingOf: 'വിവാഹം',
-  nikahCeremony: 'നിക്കാഹ് ചടങ്ങ്',
+  weddingCeremony: 'വിവാഹ ചടങ്ങ്',
 };
 
 const translations: Record<Language, Translations> = { en, ar, ml };

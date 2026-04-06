@@ -25,13 +25,21 @@
   --shadow-glow: 0 0 40px rgba(197, 148, 58, 0.15);
 
   /* Typography scale */
-  --font-display: 'Cormorant Garamond', serif;
-  --font-body: 'Jost', sans-serif;
-  --font-mono: 'DM Mono', monospace;
-  --font-arabic-display: 'Amiri', serif;
-  --font-arabic-body: 'Cairo', sans-serif;
-  --font-malayalam-display: 'Noto Serif Malayalam', serif;
-  --font-malayalam-body: 'Manjari', sans-serif;
+  --font-script: var(--font-dear-script), 'Dear Script', cursive;
+  --font-casta: var(--font-casta-thin), 'Casta', sans-serif;
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', serif;
+  --font-body: var(--font-red-hat-display), 'Red Hat Display', sans-serif;
+  --font-mono: var(--font-dm-mono), 'DM Mono', monospace;
+  
+  /* Arabic fonts */
+  --font-arabic-display: var(--font-vexa), 'VEXA', serif;
+  --font-arabic-title: var(--font-vexa-light), 'VEXA', sans-serif;
+  --font-arabic-body: var(--font-vexa-thin), 'VEXA', sans-serif;
+  
+  /* Malayalam fonts */
+  --font-malayalam-display: var(--font-ta-basheer), 'TA-Basheer', serif;
+  --font-malayalam-title: var(--font-ta-basheer), 'TA-Basheer', serif;
+  --font-malayalam-body: var(--font-annek-malayalam), 'Anek Malayalam', sans-serif;
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -54,40 +62,40 @@
   --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Dark theme */
+/* Dark theme - elegant dark with warm gold accents */
 [data-theme="dark"] {
-  --color-bg: #0D0A07;
-  --color-surface: #1A1510;
-  --color-primary: #D4A84B;
-  --color-primary-glow: rgba(212, 168, 75, 0.3);
-  --color-secondary: #3A8C65;
-  --color-secondary-glow: rgba(58, 140, 101, 0.3);
-  --color-text: #F5EDD8;
-  --color-text-secondary: #A89070;
-  --color-border: #2C2318;
-  --color-overlay: rgba(13, 10, 7, 0.9);
-  --color-glass: rgba(26, 21, 16, 0.7);
-  --color-glass-border: rgba(212, 168, 75, 0.15);
-  --noise-opacity: 0.05;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 40px rgba(212, 168, 75, 0.2);
+  --color-bg: #1A1A1A;
+  --color-surface: #252525;
+  --color-primary: #E5B85C;
+  --color-primary-glow: rgba(229, 184, 92, 0.3);
+  --color-secondary: #4A9B7F;
+  --color-secondary-glow: rgba(74, 155, 127, 0.3);
+  --color-text: #F5F5F5;
+  --color-text-secondary: #B0B0B0;
+  --color-border: #3A3A3A;
+  --color-overlay: rgba(26, 26, 26, 0.9);
+  --color-glass: rgba(37, 37, 37, 0.8);
+  --color-glass-border: rgba(229, 184, 92, 0.2);
+  --noise-opacity: 0.02;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 40px rgba(229, 184, 92, 0.15);
 }
 
 /* ---- Language-specific fonts ---- */
 [data-lang="en"] {
-  --font-heading: var(--font-display);
+  --font-heading: var(--font-script);
   --font-text: var(--font-body);
 }
 
 [data-lang="ar"] {
-  --font-heading: var(--font-arabic-display);
+  --font-heading: var(--font-arabic-title);
   --font-text: var(--font-arabic-body);
 }
 
 [data-lang="ml"] {
-  --font-heading: var(--font-malayalam-display);
+  --font-heading: var(--font-malayalam-title);
   --font-text: var(--font-malayalam-body);
 }
 
@@ -130,8 +138,8 @@ body::before {
 
 /* ---- Typography ---- */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading, var(--font-display));
-  font-weight: 600;
+  font-family: var(--font-heading, var(--font-script));
+  font-weight: 400;
   line-height: 1.2;
   letter-spacing: -0.01em;
 }
@@ -367,7 +375,7 @@ a:hover {
 }
 
 [data-theme="dark"] .islamic-pattern {
-  opacity: 0.05;
+  opacity: 0.04;
 }
 
 /* ---- Animations ---- */
@@ -548,4 +556,31 @@ a:hover {
 
 [dir="rtl"] .card {
   text-align: right;
+}
+
+/* ---- Bismillah Banner ---- */
+.bismillah-banner {
+  font-family: var(--font-arabic-display);
+  direction: rtl;
+  text-align: center;
+  color: var(--color-primary);
+  text-shadow: 0 0 40px var(--color-primary-glow);
+}
+
+/* ---- Script Font for Names ---- */
+.script-title {
+  font-family: var(--font-script);
+  font-weight: 400;
+}
+
+/* ---- Barakallah SVG ---- */
+.barakallah-svg {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  filter: drop-shadow(0 4px 20px var(--color-primary-glow));
+}
+
+[data-theme="dark"] .barakallah-svg path {
+  fill: var(--color-primary);
 }

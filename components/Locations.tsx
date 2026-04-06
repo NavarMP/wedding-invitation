@@ -132,7 +132,7 @@ export default function Locations({ translations }: LocationsProps) {
       <div className="islamic-pattern" />
 
       <h2 style={{
-        fontFamily: 'var(--font-heading)',
+        fontFamily: 'var(--font-display)',
         fontSize: 'clamp(0.85rem, 2vw, 1.1rem)',
         color: 'var(--color-text)',
         letterSpacing: '0.3em',

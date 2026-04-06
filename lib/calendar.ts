@@ -4,7 +4,7 @@ export function generateICS(): string {
   const start = '20260524T053000Z'; // 11:00 IST = 05:30 UTC
   const end = '20260524T083000Z';   // 14:00 IST = 08:30 UTC
 
-  const description = `Nikah Ceremony\\n\\nGroom: ${WEDDING.groom}\\nBride: ${WEDDING.bride}\\n\\nGroom Venue: ${WEDDING.groomVenue.name}\\nMap: ${WEDDING.groomVenue.mapUrl}\\n\\nBride Venue: ${WEDDING.brideVenue.name}\\nMap: ${WEDDING.brideVenue.mapUrl}`;
+  const description = `Wedding Ceremony\\n\\nGroom: ${WEDDING.groom}\\nBride: ${WEDDING.bride}\\n\\nGroom Venue: ${WEDDING.groomVenue.name}\\nMap: ${WEDDING.groomVenue.mapUrl}\\n\\nBride Venue: ${WEDDING.brideVenue.name}\\nMap: ${WEDDING.brideVenue.mapUrl}`;
 
   return `BEGIN:VCALENDAR
 VERSION:2.0
@@ -43,7 +43,7 @@ export function downloadICS(): void {
 export function getGoogleCalendarUrl(): string {
   const title = encodeURIComponent(`${WEDDING.groom} weds ${WEDDING.bride}`);
   const details = encodeURIComponent(
-    `Nikah Ceremony\n\nGroom Venue: ${WEDDING.groomVenue.name}\nMap: ${WEDDING.groomVenue.mapUrl}\n\nBride Venue: ${WEDDING.brideVenue.name}\nMap: ${WEDDING.brideVenue.mapUrl}`
+    `Wedding Ceremony\n\nGroom Venue: ${WEDDING.groomVenue.name}\nMap: ${WEDDING.groomVenue.mapUrl}\n\nBride Venue: ${WEDDING.brideVenue.name}\nMap: ${WEDDING.brideVenue.mapUrl}`
   );
   const location = encodeURIComponent(`${WEDDING.groomVenue.name} & ${WEDDING.brideVenue.name}`);
   const dates = '20260524T053000Z/20260524T083000Z';

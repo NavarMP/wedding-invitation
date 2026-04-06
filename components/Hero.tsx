@@ -13,34 +13,59 @@ export default function Hero({ translations }: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    // GSAP entrance animation for Hero section
     const initGSAP = async () => {
-      const gsap = (await import('gsap')).default;
+      const gsapModule = await import('gsap');
+      const gsap = gsapModule.default || gsapModule.gsap;
       const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+      
       gsap.registerPlugin(ScrollTrigger);
 
       const section = sectionRef.current;
       if (!section) return;
 
-      gsap.fromTo(
-        section.querySelectorAll('.hero-reveal'),
-        { y: 60, opacity: 0 },
+      const elements = section.querySelectorAll('.hero-animate');
+
+      // Initial entrance animation
+      gsap.fromTo(elements, 
+        { 
+          y: 40, 
+          opacity: 0 
+        },
         {
           y: 0,
           opacity: 1,
-          duration: 1,
-          stagger: 0.2,
+          duration: 0.8,
+          stagger: 0.15,
           ease: 'power3.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            end: 'bottom 20%',
-            toggleActions: 'play none none reverse',
-          },
+          delay: 0.3,
         }
       );
+
+      // Subtle parallax on scroll for scroll indicator
+      const scrollIndicator = section.querySelector('.scroll-indicator');
+      if (scrollIndicator) {
+        gsap.to(scrollIndicator, {
+          y: 15,
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+          },
+        });
+      }
     };
 
     initGSAP();
+
+    return () => {
+      import('gsap/ScrollTrigger').then(({ ScrollTrigger }) => {
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      });
+    };
   }, []);
 
   return (
@@ -59,79 +84,94 @@ export default function Hero({ translations }: HeroProps) {
     >
       <div className="islamic-pattern" />
 
-      {/* Wedding of label */}
-      <motion.p
-        className="hero-reveal"
+      {/* Bismillah at top */}
+      <motion.div
+        className="hero-animate bismillah-banner"
+        initial={{ opacity: 0, y: -20 }}
         style={{
-          fontFamily: 'var(--font-heading)',
-          fontSize: 'clamp(0.85rem, 2vw, 1.1rem)',
-          color: 'var(--color-text-secondary)',
-          letterSpacing: '0.3em',
-          textTransform: 'uppercase',
-          marginBottom: '2rem',
+          fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+          marginBottom: 'var(--space-lg)',
+          direction: 'rtl',
         }}
       >
-        {translations.weddingOf}
-      </motion.p>
+        بِسْمِ اللهِ الرَّحْمَٰنِ الرَّحِيمِ
+      </motion.div>
+
+      {/* Decorative top ornament */}
+      <motion.div
+        className="hero-animate"
+        style={{
+          fontSize: '1.5rem',
+          color: 'var(--color-primary)',
+          marginBottom: '1rem',
+        }}
+      >
+        ✦
+      </motion.div>
 
       {/* Groom name */}
       <motion.h1
-        className="hero-reveal text-shimmer"
+        className="hero-animate script-title"
         style={{
-          fontFamily: 'var(--font-heading)',
-          fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
-          fontWeight: 700,
+          fontSize: 'clamp(2rem, 6vw, 4rem)',
           lineHeight: 1.2,
           marginBottom: '0.5rem',
+          background: 'linear-gradient(135deg, var(--color-primary) 0%, #E8C76A 50%, var(--color-primary) 100%)',
+          backgroundSize: '200% auto',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
         }}
       >
         {WEDDING.groom}
       </motion.h1>
 
-      {/* Ornate divider */}
-      <motion.div
-        className="hero-reveal"
+      {/* Weds label */}
+      <motion.p
+        className="hero-animate"
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '1rem',
+          fontFamily: 'var(--font-text)',
+          fontSize: 'clamp(0.75rem, 1.5vw, 1rem)',
+          color: 'var(--color-text-secondary)',
+          letterSpacing: '0.3em',
+          textTransform: 'uppercase',
           margin: '1.5rem 0',
-          color: 'var(--color-primary)',
         }}
       >
-        <div style={{
-          width: '80px',
-          height: '1px',
-          background: 'linear-gradient(90deg, transparent, var(--color-primary))',
-        }} />
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
-          <path d="M20 2L25 15L38 20L25 25L20 38L15 25L2 20L15 15Z" />
-          <circle cx="20" cy="20" r="4" fill="currentColor" stroke="none" opacity="0.5" />
-        </svg>
-        <div style={{
-          width: '80px',
-          height: '1px',
-          background: 'linear-gradient(270deg, transparent, var(--color-primary))',
-        }} />
-      </motion.div>
+        {translations.weds}
+      </motion.p>
 
       {/* Bride name */}
       <motion.h1
-        className="hero-reveal text-shimmer"
+        className="hero-animate script-title"
         style={{
-          fontFamily: 'var(--font-heading)',
-          fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
-          fontWeight: 700,
+          fontSize: 'clamp(2rem, 6vw, 4rem)',
           lineHeight: 1.2,
           marginBottom: '2rem',
+          background: 'linear-gradient(135deg, var(--color-primary) 0%, #E8C76A 50%, var(--color-primary) 100%)',
+          backgroundSize: '200% auto',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
         }}
       >
         {WEDDING.bride}
       </motion.h1>
 
+      {/* Decorative line */}
+      <motion.div
+        className="hero-animate"
+        style={{
+          width: '120px',
+          height: '1px',
+          background: `linear-gradient(90deg, transparent, var(--color-primary), transparent)`,
+          margin: '0 auto 2rem',
+        }}
+      />
+
       {/* Date */}
       <motion.div
-        className="hero-reveal"
+        className="hero-animate"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -144,7 +184,7 @@ export default function Hero({ translations }: HeroProps) {
           padding: '0.6rem 2rem',
           border: '1px solid var(--color-border)',
           borderRadius: 'var(--radius-full)',
-          fontFamily: 'var(--font-heading)',
+          fontFamily: 'var(--font-casta)',
           fontSize: 'clamp(0.9rem, 2vw, 1.2rem)',
           color: 'var(--color-text-secondary)',
           letterSpacing: '0.15em',
@@ -154,23 +194,24 @@ export default function Hero({ translations }: HeroProps) {
         </div>
       </motion.div>
 
-      {/* Nikah Ceremony label */}
+      {/* Wedding Ceremony label */}
       <motion.p
-        className="hero-reveal"
+        className="hero-animate"
         style={{
-          fontFamily: 'var(--font-heading)',
-          fontSize: 'clamp(0.8rem, 1.5vw, 1rem)',
+          fontFamily: 'var(--font-text)',
+          fontSize: 'clamp(0.75rem, 1.5vw, 1rem)',
           color: 'var(--color-primary)',
           letterSpacing: '0.25em',
           textTransform: 'uppercase',
           marginTop: '1.5rem',
         }}
       >
-        {translations.nikahCeremony}
+        {translations.weddingCeremony}
       </motion.p>
 
       {/* Scroll indicator */}
       <motion.div
+        className="hero-animate scroll-indicator"
         style={{
           position: 'absolute',
           bottom: '2rem',
