@@ -3,45 +3,41 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ThemeMode } from '@/lib/constants';
 
+function getStoredTheme(): ThemeMode {
+  if (typeof window === 'undefined') return 'light';
+
+  const saved = localStorage.getItem('wedding-theme');
+  return saved === 'system' || saved === 'dark' || saved === 'light' ? saved : 'light';
+}
+
+function getSystemTheme(): 'light' | 'dark' {
+  if (typeof window === 'undefined') return 'light';
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
 export function useTheme() {
-  const [theme, setThemeState] = useState<ThemeMode>('light');
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
-
-  const applyTheme = useCallback((mode: ThemeMode) => {
-    const root = document.documentElement;
-    let resolved: 'light' | 'dark';
-
-    if (mode === 'system') {
-      resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    } else {
-      resolved = mode;
-    }
-
-    root.setAttribute('data-theme', resolved);
-    setResolvedTheme(resolved);
-  }, []);
+  const [theme, setThemeState] = useState<ThemeMode>(getStoredTheme);
+  const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>(getSystemTheme);
+  const resolvedTheme = theme === 'system' ? systemTheme : theme;
 
   const setTheme = useCallback((mode: ThemeMode) => {
     setThemeState(mode);
     localStorage.setItem('wedding-theme', mode);
-    applyTheme(mode);
-  }, [applyTheme]);
+  }, []);
 
   useEffect(() => {
-    const saved = localStorage.getItem('wedding-theme') as ThemeMode | null;
-    const initial = saved || 'light';
-    setThemeState(initial);
-    applyTheme(initial);
+    document.documentElement.setAttribute('data-theme', resolvedTheme);
+  }, [resolvedTheme]);
 
+  useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = () => {
-      if (theme === 'system') {
-        applyTheme('system');
-      }
+      setSystemTheme(mediaQuery.matches ? 'dark' : 'light');
     };
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
-  }, [applyTheme, theme]);
+  }, []);
 
   return { theme, setTheme, resolvedTheme };
 }

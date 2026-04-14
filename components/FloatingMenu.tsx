@@ -1,7 +1,18 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import {
+  GlobeIcon,
+  MonitorIcon,
+  MoonIcon,
+  MusicNoteIcon,
+  PauseIcon,
+  PlayIcon,
+  SunIcon,
+  Volume2Icon,
+  VolumeXIcon,
+} from '@/components/icons';
 import { ThemeMode, Language } from '@/lib/constants';
 import { Translations } from '@/lib/i18n';
 
@@ -15,6 +26,7 @@ interface FloatingMenuProps {
   toggleMusic: () => void;
   volume: number;
   setVolume: (v: number) => void;
+  toggleMute: () => void;
 }
 
 export default function FloatingMenu({
@@ -27,6 +39,7 @@ export default function FloatingMenu({
   toggleMusic,
   volume,
   setVolume,
+  toggleMute,
 }: FloatingMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -69,15 +82,10 @@ export default function FloatingMenu({
   }, []);
 
   const themes: ThemeMode[] = ['system', 'light', 'dark'];
-  const themeLabels: Record<ThemeMode, string> = {
-    system: translations.system,
-    light: translations.light,
-    dark: translations.dark,
-  };
-  const themeIcons: Record<ThemeMode, string> = {
-    system: '💻',
-    light: '☀️',
-    dark: '🌙',
+  const themeIcons: Record<ThemeMode, ReactNode> = {
+    system: <MonitorIcon width="16" height="16" />,
+    light: <SunIcon width="16" height="16" />,
+    dark: <MoonIcon width="16" height="16" />,
   };
 
   const languages: Language[] = ['en', 'ar', 'ml'];
@@ -131,7 +139,10 @@ export default function FloatingMenu({
                 display: 'block',
                 fontFamily: 'var(--font-text)',
               }}>
-                🌐 {translations.language}
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}>
+                  <GlobeIcon width="14" height="14" />
+                  {translations.language}
+                </span>
               </label>
               <div style={{ display: 'flex', gap: '0.25rem' }}>
                 {languages.map((l) => (
@@ -145,7 +156,12 @@ export default function FloatingMenu({
                       border: 'none',
                       background: language === l ? 'var(--color-primary)' : 'transparent',
                       color: language === l ? '#fff' : 'var(--color-text)',
-                      fontFamily: l === 'ar' ? "'Cairo', sans-serif" : l === 'ml' ? "'Manjari', sans-serif" : 'var(--font-text)',
+                      fontFamily:
+                        l === 'ar'
+                          ? 'var(--font-arabic-body)'
+                          : l === 'ml'
+                            ? "'Manjari', sans-serif"
+                            : 'var(--font-text)',
                       fontSize: '0.8rem',
                       fontWeight: 500,
                       cursor: 'pointer',
@@ -171,7 +187,10 @@ export default function FloatingMenu({
                 display: 'block',
                 fontFamily: 'var(--font-text)',
               }}>
-                🌙 {translations.theme}
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}>
+                  <MoonIcon width="14" height="14" />
+                  {translations.theme}
+                </span>
               </label>
               <div style={{ display: 'flex', gap: '0.25rem' }}>
                 {themes.map((t) => (
@@ -210,7 +229,10 @@ export default function FloatingMenu({
                 display: 'block',
                 fontFamily: 'var(--font-text)',
               }}>
-                🎵 {translations.music}
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}>
+                  <MusicNoteIcon width="14" height="14" />
+                  {translations.music}
+                </span>
               </label>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <button
@@ -233,14 +255,9 @@ export default function FloatingMenu({
                   aria-label={isPlaying ? 'Pause music' : 'Play music'}
                 >
                   {isPlaying ? (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <rect x="6" y="4" width="4" height="16" />
-                      <rect x="14" y="4" width="4" height="16" />
-                    </svg>
+                    <PauseIcon width="14" height="14" />
                   ) : (
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                      <polygon points="8,5 19,12 8,19" />
-                    </svg>
+                    <PlayIcon width="14" height="14" />
                   )}
                   {/* Waveform visualizer */}
                   {isPlaying && (
@@ -253,6 +270,27 @@ export default function FloatingMenu({
                       opacity: 0.4,
                     }} />
                   )}
+                </button>
+
+                <button
+                  onClick={toggleMute}
+                  style={{
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    border: 'none',
+                    background: 'transparent',
+                    color: 'var(--color-text)',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all var(--transition-fast)',
+                    flexShrink: 0,
+                  }}
+                  aria-label={volume === 0 ? translations.unmute : translations.mute}
+                >
+                  {volume === 0 ? <VolumeXIcon width="16" height="16" /> : <Volume2Icon width="16" height="16" />}
                 </button>
 
                 <input
@@ -268,7 +306,7 @@ export default function FloatingMenu({
                     accentColor: 'var(--color-primary)',
                     cursor: 'pointer',
                   }}
-                  aria-label="Volume"
+                  aria-label={translations.volume}
                 />
               </div>
             </div>

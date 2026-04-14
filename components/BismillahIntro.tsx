@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { StarIcon } from '@/components/icons';
 import { Translations } from '@/lib/i18n';
 
 interface BismillahIntroProps {
@@ -12,26 +13,17 @@ interface BismillahIntroProps {
 export default function BismillahIntro({ translations, onEnter }: BismillahIntroProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Generate particle positions only on client to avoid hydration mismatch
-  const particles = useMemo(() => {
-    if (typeof window === 'undefined') return [];
-    return Array.from({ length: 30 }).map((_, i) => ({
-      width: Math.random() * 3 + 1,
-      height: Math.random() * 3 + 1,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      opacity: Math.random() * 0.5 + 0.1,
-      duration: Math.random() * 4 + 3,
-      delay: Math.random() * 3,
-    }));
-  }, []);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const particles = Array.from({ length: 30 }, (_, index) => ({
+    width: 1 + (index % 4),
+    height: 1 + ((index + 2) % 4),
+    left: `${(index * 17) % 100}%`,
+    top: `${(index * 11) % 100}%`,
+    opacity: 0.12 + (index % 5) * 0.08,
+    duration: 3 + (index % 6) * 0.45,
+    delay: (index % 7) * 0.25,
+  }));
 
   const handleEnter = () => {
     setIsExiting(true);
@@ -75,36 +67,34 @@ export default function BismillahIntro({ translations, onEnter }: BismillahIntro
           {/* Islamic geometric pattern background */}
           <div className="islamic-pattern" />
 
-          {/* Particle field — only rendered client-side */}
-          {mounted && (
-            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-              {particles.map((p, i) => (
-                <motion.div
-                  key={i}
-                  style={{
-                    position: 'absolute',
-                    width: p.width,
-                    height: p.height,
-                    background: 'var(--color-primary)',
-                    borderRadius: '50%',
-                    left: p.left,
-                    top: p.top,
-                    opacity: p.opacity,
-                  }}
-                  animate={{
-                    y: [0, -30, 0],
-                    opacity: [0.1, 0.5, 0.1],
-                  }}
-                  transition={{
-                    duration: p.duration,
-                    repeat: Infinity,
-                    delay: p.delay,
-                    ease: 'easeInOut',
-                  }}
-                />
-              ))}
-            </div>
-          )}
+          {/* Particle field */}
+          <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+            {particles.map((p, index) => (
+              <motion.div
+                key={index}
+                style={{
+                  position: 'absolute',
+                  width: p.width,
+                  height: p.height,
+                  background: 'var(--color-primary)',
+                  borderRadius: '50%',
+                  left: p.left,
+                  top: p.top,
+                  opacity: p.opacity,
+                }}
+                animate={{
+                  y: [0, -30, 0],
+                  opacity: [0.1, 0.5, 0.1],
+                }}
+                transition={{
+                  duration: p.duration,
+                  repeat: Infinity,
+                  delay: p.delay,
+                  ease: 'easeInOut',
+                }}
+              />
+            ))}
+          </div>
 
           {/* Bismillah text */}
           <motion.div
@@ -122,12 +112,11 @@ export default function BismillahIntro({ translations, onEnter }: BismillahIntro
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
               style={{
-                fontSize: '2rem',
                 color: 'var(--color-primary)',
                 marginBottom: '1.5rem',
               }}
             >
-              ✦
+              <StarIcon width="32" height="32" />
             </motion.div>
 
             <motion.h1
@@ -135,7 +124,7 @@ export default function BismillahIntro({ translations, onEnter }: BismillahIntro
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
               style={{
-                fontFamily: "'Amiri', serif",
+                fontFamily: 'var(--font-arabic-display)',
                 fontSize: 'clamp(2rem, 8vw, 5rem)',
                 color: 'var(--color-primary)',
                 lineHeight: 1.4,
@@ -203,12 +192,11 @@ export default function BismillahIntro({ translations, onEnter }: BismillahIntro
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 2.2, duration: 0.8 }}
               style={{
-                fontSize: '2rem',
                 color: 'var(--color-primary)',
                 marginTop: '2rem',
               }}
             >
-              ✦
+              <StarIcon width="32" height="32" />
             </motion.div>
           </motion.div>
         </motion.div>

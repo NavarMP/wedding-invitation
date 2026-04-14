@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Translations } from '@/lib/i18n';
 import { downloadICS, getGoogleCalendarUrl } from '@/lib/calendar';
-import { WEDDING } from '@/lib/constants';
+import ReminderControl from '@/components/ReminderControl';
+import { CalendarIcon, MailIcon, MonitorIcon } from '@/components/icons';
 
 interface ActionsProps {
   translations: Translations;
@@ -12,17 +13,9 @@ interface ActionsProps {
 
 export default function Actions({ translations }: ActionsProps) {
   const [showCalendarDropdown, setShowCalendarDropdown] = useState(false);
-  const [reminderStatus, setReminderStatus] = useState<'idle' | 'set' | 'denied'>('idle');
-  const [showToast, setShowToast] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && localStorage.getItem('wedding-reminder-set')) {
-      setReminderStatus('set');
-    }
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,23 +37,6 @@ export default function Actions({ translations }: ActionsProps) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const handleSetReminder = async () => {
-    if (!('Notification' in window)) {
-      setReminderStatus('denied');
-      return;
-    }
-
-    const permission = await Notification.requestPermission();
-    if (permission === 'granted') {
-      localStorage.setItem('wedding-reminder-set', 'true');
-      setReminderStatus('set');
-      setShowToast(true);
-      setTimeout(() => setShowToast(false), 4000);
-    } else {
-      setReminderStatus('denied');
-    }
-  };
 
   return (
     <section
@@ -148,7 +124,7 @@ export default function Actions({ translations }: ActionsProps) {
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   aria-label="Add to Google Calendar"
                 >
-                  <span>📅</span>
+                  <CalendarIcon width="16" height="16" />
                   {translations.googleCalendar}
                 </a>
                 <button
@@ -174,7 +150,7 @@ export default function Actions({ translations }: ActionsProps) {
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   aria-label="Download ICS for Apple Calendar"
                 >
-                  <span>🍎</span>
+                  <MonitorIcon width="16" height="16" />
                   {translations.appleCalendar}
                 </button>
                 <button
@@ -200,7 +176,7 @@ export default function Actions({ translations }: ActionsProps) {
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                   aria-label="Download ICS for Outlook"
                 >
-                  <span>📧</span>
+                  <MailIcon width="16" height="16" />
                   {translations.outlook}
                 </button>
               </motion.div>
@@ -209,70 +185,11 @@ export default function Actions({ translations }: ActionsProps) {
         </div>
 
         {/* Set Reminder */}
-        <div>
-          <motion.button
-            className="btn btn-secondary"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleSetReminder}
-            disabled={reminderStatus === 'set'}
-            aria-label="Set Reminder"
-            style={{
-              padding: '1rem 2rem',
-              fontSize: '1rem',
-              opacity: reminderStatus === 'set' ? 0.7 : 1,
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-            </svg>
-            {reminderStatus === 'set' ? '✓ Reminder Set' : translations.setReminder}
-          </motion.button>
-        </div>
+        <ReminderControl
+          translations={translations}
+          buttonStyle={{ padding: '1rem 2rem', fontSize: '1rem' }}
+        />
       </div>
-
-      {/* Denied message */}
-      {reminderStatus === 'denied' && (
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{
-            marginTop: 'var(--space-md)',
-            color: 'var(--color-text-secondary)',
-            fontSize: '0.85rem',
-            maxWidth: '400px',
-          }}
-        >
-          {translations.reminderDenied}
-        </motion.p>
-      )}
-
-      {/* Toast */}
-      <AnimatePresence>
-        {showToast && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="glass"
-            style={{
-              position: 'fixed',
-              bottom: '100px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              padding: '1rem 2rem',
-              zIndex: 8000,
-              color: 'var(--color-text)',
-              fontFamily: 'var(--font-text)',
-              fontSize: '0.9rem',
-              boxShadow: 'var(--shadow-lg)',
-            }}
-          >
-            🔔 {translations.reminderSet}
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

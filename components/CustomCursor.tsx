@@ -5,12 +5,14 @@ import { useEffect, useRef, useState } from 'react';
 export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
-  const [isTouch, setIsTouch] = useState(false);
+  const [isTouch, setIsTouch] = useState(true);
 
   useEffect(() => {
     // Detect touch device
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    setIsTouch(isTouchDevice);
+    const frame = window.requestAnimationFrame(() => {
+      setIsTouch(isTouchDevice);
+    });
     if (isTouchDevice) return;
 
     document.documentElement.classList.add('custom-cursor-active');
@@ -76,6 +78,7 @@ export default function CustomCursor() {
     animFrame = requestAnimationFrame(animateRing);
 
     return () => {
+      window.cancelAnimationFrame(frame);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mousedown', handleMouseDown);
       document.removeEventListener('mouseover', handleMouseOver);

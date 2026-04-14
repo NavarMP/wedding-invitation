@@ -6,6 +6,7 @@ export function useAudio() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolumeState] = useState(0.5);
+  const lastVolumeRef = useRef(0.5);
 
   useEffect(() => {
     const audio = new Audio('/assets/nasheed.mp3');
@@ -69,10 +70,23 @@ export function useAudio() {
 
   const setVolume = useCallback((v: number) => {
     setVolumeState(v);
+    if (v > 0) {
+      lastVolumeRef.current = v;
+    }
     if (audioRef.current) {
       audioRef.current.volume = v;
     }
   }, []);
 
-  return { isPlaying, toggle, play, pause, volume, setVolume };
+  const toggleMute = useCallback(() => {
+    if (volume === 0) {
+      setVolume(lastVolumeRef.current || 0.5);
+      return;
+    }
+
+    lastVolumeRef.current = volume;
+    setVolume(0);
+  }, [setVolume, volume]);
+
+  return { isPlaying, toggle, play, pause, volume, setVolume, toggleMute };
 }

@@ -4,13 +4,22 @@ import {
   Cormorant_Garamond,
   Jost,
   DM_Mono,
-  Amiri,
-  Cairo,
   Noto_Serif_Malayalam,
   Manjari,
 } from 'next/font/google';
 import { Anek_Malayalam } from 'next/font/google';
 import './globals.css';
+
+function getMetadataBase() {
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+    process.env.VERCEL_URL ||
+    'http://localhost:3000';
+
+  const normalizedSiteUrl = siteUrl.startsWith('http') ? siteUrl : `https://${siteUrl}`;
+  return new URL(normalizedSiteUrl);
+}
 
 const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant',
@@ -30,20 +39,6 @@ const dmMono = DM_Mono({
   variable: '--font-dm-mono',
   subsets: ['latin'],
   weight: ['300', '400', '500'],
-  display: 'swap',
-});
-
-const amiri = Amiri({
-  variable: '--font-amiri',
-  subsets: ['arabic', 'latin'],
-  weight: ['400', '700'],
-  display: 'swap',
-});
-
-const cairo = Cairo({
-  variable: '--font-cairo',
-  subsets: ['arabic', 'latin'],
-  weight: ['300', '400', '500', '600'],
   display: 'swap',
 });
 
@@ -118,6 +113,7 @@ const redHatDisplay = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: getMetadataBase(),
   title: 'Muhammed Adhil Nizami Baqawi weds Swaliha Febin Sanaa-iyya | 24 May 2026',
   description:
     'You are warmly invited to the wedding ceremony of Muhammed Adhil Nizami Baqawi and Swaliha Febin Sanaa-iyya on Sunday, 24 May 2026 at 11:00 AM. Barakallah!',
@@ -125,14 +121,12 @@ export const metadata: Metadata = {
     title: 'Muhammed Adhil Nizami Baqawi weds Swaliha Febin Sanaa-iyya | 24 May 2026',
     description:
       'You are warmly invited to the wedding ceremony of Muhammed Adhil Nizami Baqawi and Swaliha Febin Sanaa-iyya on Sunday, 24 May 2026 at 11:00 AM.',
-    images: [{ url: '/assets/flyer.jpg', width: 800, height: 1000, alt: 'Wedding Invitation Flyer' }],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Muhammed Adhil Nizami Baqawi weds Swaliha Febin Sanaa-iyya',
     description: 'wedding ceremony - Sunday, 24 May 2026 at 11:00 AM',
-    images: ['/assets/flyer.jpg'],
   },
   icons: {
     icon: '/favicon.ico',
@@ -154,8 +148,6 @@ export default function RootLayout({
         ${cormorant.variable}
         ${jost.variable}
         ${dmMono.variable}
-        ${amiri.variable}
-        ${cairo.variable}
         ${notoSerifMalayalam.variable}
         ${manjari.variable}
         ${annekMalayalam.variable}

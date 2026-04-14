@@ -32,9 +32,9 @@
   --font-mono: var(--font-dm-mono), 'DM Mono', monospace;
   
   /* Arabic fonts */
-  --font-arabic-display: var(--font-vexa), 'VEXA', serif;
+  --font-arabic-display: var(--font-vexa-regular), 'VEXA', serif;
   --font-arabic-title: var(--font-vexa-light), 'VEXA', sans-serif;
-  --font-arabic-body: var(--font-vexa-thin), 'VEXA', sans-serif;
+  --font-arabic-body: var(--font-vexa-regular), 'VEXA', sans-serif;
   
   /* Malayalam fonts */
   --font-malayalam-display: var(--font-ta-basheer), 'TA-Basheer', serif;

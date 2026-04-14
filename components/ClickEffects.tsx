@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { HeartIcon, SparklesIcon, StarIcon } from '@/components/icons';
 import { Translations } from '@/lib/i18n';
 
 interface ClickEffectsProps {
@@ -94,9 +95,6 @@ export default function ClickEffects({ translations }: ClickEffectsProps) {
     };
   }, [createClickParticles, showLovePopup]);
 
-  const particleShapes = ['✦', '☪', '◇', '⬥', '✧'];
-  const heartShapes = ['🤍', '✨', '💫', '⭐'];
-
   return (
     <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 9500 }}>
       {/* Click particles */}
@@ -129,12 +127,18 @@ export default function ClickEffects({ translations }: ClickEffectsProps) {
                   }}
                   transition={{ duration: 0.8, ease: 'easeOut' }}
                   style={{
-                    fontSize: '0.7rem',
                     color: 'var(--color-primary)',
                     pointerEvents: 'none',
+                    display: 'inline-flex',
                   }}
                 >
-                  {particleShapes[i % particleShapes.length]}
+                  {i % 3 === 0 ? (
+                    <SparklesIcon width="14" height="14" />
+                  ) : i % 3 === 1 ? (
+                    <StarIcon width="14" height="14" />
+                  ) : (
+                    <HeartIcon width="14" height="14" />
+                  )}
                 </motion.span>
               );
             })}
@@ -173,8 +177,12 @@ export default function ClickEffects({ translations }: ClickEffectsProps) {
                 fontFamily: 'var(--font-text)',
                 boxShadow: 'var(--shadow-md)',
                 pointerEvents: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
               }}
             >
+              <HeartIcon width="16" height="16" />
               {translations.sendLove}
             </motion.div>
 
@@ -205,11 +213,18 @@ export default function ClickEffects({ translations }: ClickEffectsProps) {
                   }}
                   transition={{ duration: 1.2, ease: 'easeOut' }}
                   style={{
-                    fontSize: '1rem',
                     pointerEvents: 'none',
+                    display: 'inline-flex',
+                    color: i % 2 === 0 ? 'var(--color-primary)' : 'var(--color-secondary)',
                   }}
                 >
-                  {heartShapes[i % heartShapes.length]}
+                  {i % 3 === 0 ? (
+                    <HeartIcon width="16" height="16" />
+                  ) : i % 3 === 1 ? (
+                    <SparklesIcon width="16" height="16" />
+                  ) : (
+                    <StarIcon width="16" height="16" />
+                  )}
                 </motion.span>
               );
             })}

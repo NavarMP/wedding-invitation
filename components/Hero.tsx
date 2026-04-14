@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { StarIcon } from '@/components/icons';
 import { WEDDING } from '@/lib/constants';
 import { Translations } from '@/lib/i18n';
 
@@ -94,19 +95,18 @@ export default function Hero({ translations }: HeroProps) {
           direction: 'rtl',
         }}
       >
-        بِسْمِ اللهِ الرَّحْمَٰنِ الرَّحِيمِ
+        {translations.bismillahFull}
       </motion.div>
 
       {/* Decorative top ornament */}
       <motion.div
         className="hero-animate"
         style={{
-          fontSize: '1.5rem',
           color: 'var(--color-primary)',
           marginBottom: '1rem',
         }}
       >
-        ✦
+        <StarIcon width="26" height="26" />
       </motion.div>
 
       {/* Groom name */}

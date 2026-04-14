@@ -19,7 +19,7 @@ export default function HomePage() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, translations, isTransitioning } = useLanguage();
-  const { isPlaying, toggle: toggleMusic, volume, setVolume } = useAudio();
+  const { isPlaying, toggle: toggleMusic, volume, setVolume, toggleMute } = useAudio();
 
   useEffect(() => {
     setMounted(true);
@@ -88,6 +88,7 @@ export default function HomePage() {
         toggleMusic={toggleMusic}
         volume={volume}
         setVolume={setVolume}
+        toggleMute={toggleMute}
       />
     </>
   );

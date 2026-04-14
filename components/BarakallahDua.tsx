@@ -3,15 +3,7 @@
 import { useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-interface BarakallahDuaProps {
-  translations?: {
-    barakallah?: string;
-    barakallahSub?: string;
-    barakallahMeaning?: string;
-  };
-}
-
-export default function BarakallahDua({ translations }: BarakallahDuaProps) {
+export default function BarakallahDua() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 'use client';
 
+import { HeartIcon } from '@/components/icons';
 import { Translations } from '@/lib/i18n';
 
 interface FooterProps {
@@ -34,7 +35,11 @@ export default function Footer({ translations }: FooterProps) {
         fontSize: '0.9rem',
         color: 'var(--color-text-secondary)',
         letterSpacing: '0.1em',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '0.5rem',
       }}>
+        <HeartIcon width="16" height="16" />
         {translations.madeWith}
       </p>
     </footer>
